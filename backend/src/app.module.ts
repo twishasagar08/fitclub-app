@@ -20,10 +20,13 @@ import { StepRecord } from "./entities/step.entity";
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         const isProduction = process.env.NODE_ENV === "production";
+        
+        // Hardcoded for testing
+        const testDatabaseUrl = "postgresql://neondb_owner:npg_LGmOsW3Pq1ip@ep-muddy-dust-a17yjitz-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
 
         return {
           type: "postgres",
-          url: process.env.DATABASE_URL,
+          url: testDatabaseUrl || process.env.DATABASE_URL,
           entities: [User, StepRecord],
           synchronize: !isProduction,
           extra: {
