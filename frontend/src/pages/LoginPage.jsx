@@ -3,7 +3,7 @@ import React from 'react';
 const LoginPage = () => {
   const handleGoogleLogin = () => {
     // Force Google account picker and consent screen to ensure we get a refresh token
-    const backendUrl = 'http://localhost:3000';
+    const backendUrl = 'https://fitclub-app-production.up.railway.app';
     // prompt=select_account consent: Forces account picker AND consent screen (critical for refresh token)
     // access_type=offline: Requests a refresh token
     window.location.href = `${backendUrl}/auth/google?access_type=offline&prompt=select_account%20consent`;
