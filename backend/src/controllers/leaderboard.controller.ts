@@ -10,4 +10,9 @@ export class LeaderboardController {
   async getLeaderboard(): Promise<User[]> {
     return await this.leaderboardService.getLeaderboard();
   }
+
+  @Get('top')
+  async getTopUsers(): Promise<string> {
+    return "hello";
+  }
 }
