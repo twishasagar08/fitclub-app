@@ -16,38 +16,21 @@ import { StepRecord } from "./entities/step.entity";
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // Configure TypeORM dynamically - prefer DATABASE_URL if present (and add SSL options for managed DBs).
+    // Configure TypeORM with Neon DB connection string
     TypeOrmModule.forRootAsync({
       useFactory: () => {
         const isProduction = process.env.NODE_ENV === "production";
 
-        if (process.env.DATABASE_URL) {
-          // When using a connection string (DATABASE_URL) for managed DBs like Neon/RDS
-          return {
-            type: "postgres",
-            url: process.env.DATABASE_URL,
-            entities: [User, StepRecord],
-            synchronize: !isProduction,
-            extra: {
-              ssl: {
-                // For many managed DB services a self-signed/unknown CA may be used.
-                // 'rejectUnauthorized: false' is commonly required to establish a TLS connection in Node.
-                rejectUnauthorized: false,
-              },
-            },
-          };
-        }
-
-        // Fallback to individual env vars
         return {
           type: "postgres",
-          host: process.env.DATABASE_HOST || "localhost",
-          port: parseInt(process.env.DATABASE_PORT, 10) || 5432,
-          username: process.env.DATABASE_USERNAME || "postgres",
-          password: process.env.DATABASE_PASSWORD || "postgres",
-          database: process.env.DATABASE_NAME || "fitclub",
+          url: process.env.DATABASE_URL,
           entities: [User, StepRecord],
-          synchronize: !isProduction, // Only enabled outside of production
+          synchronize: !isProduction,
+          extra: {
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          },
         };
       },
     }),
